@@ -4,11 +4,6 @@ std::smatch ip_parsed;
 std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
 std::smatch mac_parsed;
 std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
-bool update_table(false);
-bool networkIpSet(false);
-bool showHelp(false);
-std::string networkIp;
-std::vector<MacIp> macIpList;
 
 void sendPingAroundNetwork(const std::string& networkIp) {
   std::string appStr("ping");
@@ -70,9 +65,9 @@ void printMacIpList(const std::vector<MacIp>& list) {
 void printUsage() {
   std::cout << "\n";
   std::cout << "Usage: ./mac_finder [--update_table] <network_ip> <mac_address> [<mac_address>]\n\n";
+  std::cout << "\n";
   std::cout << "MAC addresses should be specified as a space-separated list. "
             << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n";
-  exit(0);
 }
 
 void showVariables() {
