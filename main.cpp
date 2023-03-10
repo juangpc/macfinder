@@ -4,11 +4,8 @@
 
 #include "macfinder.hpp"
 
-bool update_table(false);
-bool networkIpSet(false);
-bool showHelp(false);
-std::string networkIp;
-std::vector<MacIp> macIpList;
+const std::string mac_finder_table_filename(".mac_finder_171921");
+
 
 int main(int argc, char* argv[]) {
 

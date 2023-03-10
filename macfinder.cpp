@@ -1,5 +1,7 @@
 #include "macfinder.hpp"
 
+namespace MACFINDER {
+
 std::smatch ip_parsed;
 std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
 std::smatch mac_parsed;
@@ -70,7 +72,7 @@ void printUsage() {
             << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n";
 }
 
-void showVariables() {
+void MacFinderApp::showVariables() {
   std::cout << " =====  start show variables  =====\n";
   std::cout << "NetworkIP: " << networkIp << "\n";
   std::cout << "update_table:" << update_table << "\n"; 
@@ -80,7 +82,7 @@ void showVariables() {
   std::cout << " =====  end show variables  =====\n";
 }
 
-void parseInputArgs(int argc, char* argv[]) {
+void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
   std::string arg;
   // parse argumets
   if (argc < 3) {
@@ -104,3 +106,5 @@ void parseInputArgs(int argc, char* argv[]) {
     }
   }
 }
+
+}  // namespace MACFINDER 

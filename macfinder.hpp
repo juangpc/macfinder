@@ -10,6 +10,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+namespace MACFINDER {
+
 struct MacIp {
   MacIp(const std::string& mac_, 
         const std::string& ip_)
@@ -18,6 +20,24 @@ struct MacIp {
   std::string mac;
   std::string ip;
 };
+
+class MacFinderApp {
+public: 
+  MacFinderApp()
+    : update_table(false),
+    networkIpSet(false), 
+    showHelp(false) 
+  {  }
+  void parseInputArgs(int argc, char* argv[]);
+  void showVariables();
+private:
+  bool update_table;
+  bool networkIpSet;
+  bool showHelp;
+  std::string networkIp;
+  std::vector<MacIp> macIpList;
+};
+
 
 void sendPingAroundNetwork(const std::string& networkIp);
 
@@ -35,7 +55,5 @@ void printMacIpList(const std::vector<MacIp>& list);
 
 void printUsage();
 
-void showVariables();
 
-void parseInputArgs(int argc, char* argv[]);
-
+}  // namespace MACFINDER
