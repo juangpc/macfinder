@@ -11,7 +11,10 @@
 #include <unistd.h>
 
 struct MacIp {
-  MacIp(const std::string& mac_, const std::string& ip_): mac(mac_), ip(ip_){};
+  MacIp(const std::string& mac_, 
+        const std::string& ip_)
+  : mac(mac_), ip(ip_)
+  {};
   std::string mac;
   std::string ip;
 };
@@ -31,6 +34,8 @@ void delete_file(const std::string& filename);
 void printMacIpList(const std::vector<MacIp>& list);
 
 void printUsage();
+
+void showVariables();
 
 void parseInputArgs(int argc, char* argv[]);
 

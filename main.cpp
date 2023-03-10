@@ -2,52 +2,14 @@
 #include <regex>
 #include <vector>
 
-#include "mac_finder.hpp"
+#include "macfinder.hpp"
 
-void printUsage() {
-  std::cout << "\n";
-  std::cout << "Usage: ./mac_finder [--update_table] <network_ip> <mac_address> [<mac_address>]\n\n";
-  std::cout << "MAC addresses should be specified as a space-separated list. "
-            << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n";
-  exit(0);
-}
-
-bool update_table(false);
-bool networkIpSet(false);
-bool showHelp(false);
-std::string networkIp;
-std::vector<MacIp> macIpList;
 
 int main(int argc, char* argv[]) {
 
-  std::smatch ip_parsed;
-  std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
-  std::smatch mac_parsed;
-  std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
-  std::string arg;
-  // parse argumets
-  if (argc < 3) {
-    showHelp = true;
-  }
-  for (size_t argi = 1; argi < argc; argi++) {
-    arg = argv[argi];
-    if ( arg  == "--update_table") { 
-      update_table = true;
-    } 
-    else if (std::regex_search(arg, ip_parsed, ip_regex) && !networkIpSet ) {
-      networkIp = arg;
-      networkIpSet = true;
-    }
-    else if (std::regex_search(arg, mac_parsed, mac_regex)) {
-      macIpList.emplace_back(MacIp(mac_parsed[0],""));
-    } 
-    else {
-      std::cout << "Incorrect argument format: " << arg << "\n";
-      showHelp = true;
-    }
-  }
-
+ 
   // show variables
+  showVariables();
   std::cout << " =====  start show variables  =====\n";
   std::cout << "NetworkIP: " << networkIp << "\n";
   std::cout << "update_table:" << update_table << "\n"; 

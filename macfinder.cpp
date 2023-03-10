@@ -1,5 +1,15 @@
 #include "macfinder.hpp"
 
+std::smatch ip_parsed;
+std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
+std::smatch mac_parsed;
+std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
+bool update_table(false);
+bool networkIpSet(false);
+bool showHelp(false);
+std::string networkIp;
+std::vector<MacIp> macIpList;
+
 void sendPingAroundNetwork(const std::string& networkIp) {
   std::string appStr("ping");
   std::string appFlags("-c 1 -w 0.002");
@@ -65,6 +75,15 @@ void printUsage() {
   exit(0);
 }
 
+void showVariables() {
+  std::cout << " =====  start show variables  =====\n";
+  std::cout << "NetworkIP: " << networkIp << "\n";
+  std::cout << "update_table:" << update_table << "\n"; 
+  std::cout << "networkIpSet:" << networkIpSet << "\n";
+  std::cout << "showHelp:" << showHelp << "\n";
+  printMacIpList(macIpList);
+  std::cout << " =====  end show variables  =====\n";
+}
 
 void parseInputArgs(int argc, char* argv[]) {
   std::string arg;
@@ -89,14 +108,4 @@ void parseInputArgs(int argc, char* argv[]) {
       showHelp = true;
     }
   }
-
-  // show variables
-  std::cout << " =====  start show variables  =====\n";
-  std::cout << "NetworkIP: " << networkIp << "\n";
-  std::cout << "update_table:" << update_table << "\n"; 
-  std::cout << "networkIpSet:" << networkIpSet << "\n";
-  std::cout << "showHelp:" << showHelp << "\n";
-  printMacIpList(macIpList);
-  std::cout << " =====  end show variables  =====\n";
-
 }
