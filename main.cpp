@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
   }
 
   if (app.update_table) {
-    MACFINDER::sendPingAroundNetwork(app.networkIp);
+    MACFINDER::sendPingsAroundNetwork(app.networkIp);
   }
   app.findIps();
 

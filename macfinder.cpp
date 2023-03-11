@@ -41,26 +41,35 @@ void MacFinderApp::findIps() {
   delete_file(arp_table_filename);
 }
 
+void printAllInputArg(int argc, char* argv[]) {
+  std::cout << " =====  printing all args  ======\n"
+    << "\n"
+    << "num args: " << argc << "\n";
+  for (int ii = 0; ii < argc; ii++) {
+    std::cout << ii << " - " << argv[ii] << "\n";
+  }
+  std::cout << "\n";
+}
+
 void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
+  //printAllInputArg(argc, argv);
   std::string arg;
 
-
-  // parse argumets
-  if (argc < 2) {
+  if (argc == 1) {
     errorParsingArgs = true;
   } else {
-    if (strcmp(argv[1],"-h") || strcmp(argv[1],"--help")) {
-      printHelp();
-      exit(0);
-    }
-    if (strcmp(argv[1],"--version")) {
-      printVersion();
-      exit(0);
-    }
     for (int argi = 1; argi < argc; argi++) {
       arg = argv[argi];
       std::smatch ip_parsed, mac_parsed;
-      if ( arg  == "--update_table" || arg == "-u") { 
+      if ((arg == "-h") || (arg == "--help")) {
+        printHelp();
+        exit(0);
+      }
+      else if ( arg == "--version") {
+        printVersion();
+        exit(0);
+      }
+      else if ( arg  == "--update_table" || arg == "-u") { 
         update_table = true;
       }
       else if (std::regex_search(arg, ip_parsed, IP_REGEX) && !networkIpSet) {
@@ -71,7 +80,7 @@ void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
         macIpList.emplace_back(MacIp(mac_parsed[0],""));
       } 
       else {
-        std::cout << "Incorrect argument format: " << arg << "\n";
+        std::cout << "Incorrect usage: " << arg << "\n";
         errorParsingArgs = true;
       }
     }
@@ -88,7 +97,7 @@ void MacFinderApp::showState() const {
   std::cout << " =====  end show variables  =====\n";
 }
 
-void sendPingAroundNetwork(const std::string& networkIp) {
+void sendPingsAroundNetwork(const std::string& networkIp) {
   std::string appStr("ping");
   std::string appFlags("-c 1 -w 0.002");
   std::thread* threads[255];
@@ -118,9 +127,8 @@ void delete_file(const std::string& filename) {
 
 void printVersion() {
   std::cout << "\n"
-    << "MacFinder\n"
-    << "version: 0.1 (2023)\n"
-    << "author: juangpc\n"
+    << "MacFinder 0.1 (2023)\n"
+    << "Author: juangpc\n"
     << "\n";
 }
 
@@ -135,7 +143,9 @@ void printHelp() {
     << "<networ_ip>          Network IP example: 192.169.1.0\n"
     << "<mac_address_list>   MAC addresses list should be specified as a \n"
     << "                     space-separated list. Use lower case letters.\n"
-    << "                     Example. 00:0e:c6:5b:65:ab 00:0e:c6:73:c7:31\n"
+    << "\n"
+    << "Ex: ./macfinder -u 172.21.16.0 00:0e:c6:5b:65:ab 00:0e:c6:73:c7:31\n"
+    << "\n"
     << "\n";
 }
 
