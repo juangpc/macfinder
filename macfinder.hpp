@@ -26,16 +26,18 @@ public:
   MacFinderApp()
     : update_table(false),
     networkIpSet(false), 
-    showHelp(false) 
+    showHelp(false),
+    table_filename(".macfinder_171921")
   {  }
   void parseInputArgs(int argc, char* argv[]);
   void showVariables();
-private:
   bool update_table;
   bool networkIpSet;
   bool showHelp;
   std::string networkIp;
   std::vector<MacIp> macIpList;
+  const char* table_filename;
+private:
 };
 
 
@@ -46,6 +48,8 @@ void systemCalltoFile(const std::string& call,
 
 void fileToVectorOfStrings(const std::string& filename, 
                            std::vector<std::string>& lines);
+
+void macIsFound(std::string& s, const std::match& found, const std::regex& p);
 
 bool file_exists (const std::string& filename);
 

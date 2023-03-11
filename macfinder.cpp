@@ -2,6 +2,8 @@
 
 namespace MACFINDER {
 
+const char* macfinder_ = ".mac_finder_171921";
+
 std::smatch ip_parsed;
 std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
 std::smatch mac_parsed;
@@ -50,6 +52,10 @@ void fileToVectorOfStrings(const std::string& filename,
     }
   }
 
+}
+
+void macIsFound(std::string& s, const std::match& found, const std::regex& p) {
+  return std::regex_search(s, found, p );
 }
 
 bool file_exists (const std::string& filename) {
