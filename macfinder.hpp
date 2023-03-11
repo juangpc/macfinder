@@ -12,8 +12,8 @@
 
 namespace MACFINDER {
 
-const std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
-const std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
+const std::regex MAC_REGEX("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
+const std::regex IP_REGEX("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
 
 struct MacIp {
   MacIp(const std::string& mac_, 
@@ -29,7 +29,7 @@ public:
   MacFinderApp()
     : update_table(false),
     networkIpSet(false), 
-    showHelp(false),
+    errorParsingArgs(false),
     arp_table_filename(".macfinder_171921")
   {  }
   void printMacIpList() const;
@@ -38,13 +38,15 @@ public:
   void showState() const;
   bool update_table;
   bool networkIpSet;
-  bool showHelp;
+  bool errorParsingArgs;
   std::string networkIp;
   std::vector<MacIp> macIpList;
   const char* arp_table_filename;
 private:
   std::vector<std::string> talbeARP;
 };
+
+void printMacIpList(const std::vector<MacIp>& macIpList);
 
 void sendPingAroundNetwork(const std::string& networkIp);
 

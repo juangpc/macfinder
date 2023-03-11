@@ -9,8 +9,7 @@ int main(int argc, char* argv[]) {
   MACFINDER::MacFinderApp app;
 
   app.parseInputArgs(argc, argv);
-
-  if (app.showHelp) {
+  if (app.errorParsingArgs) {
     MACFINDER::printUsage();
     return 1;
   }
@@ -20,11 +19,6 @@ int main(int argc, char* argv[]) {
   }
   app.findIps();
 
-  for (const MACFINDER::MacIp& macip_i : app.macIpList) {
-    std::cout << "mac: " << macip_i.mac << " - ip: "
-        << (macip_i.ip.empty() ? "not found" : macip_i.ip.c_str())
-        << "\n";
-  }
 
   return 0;
 }
