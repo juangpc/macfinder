@@ -32,10 +32,10 @@ public:
     showHelp(false),
     arp_table_filename(".macfinder_171921")
   {  }
-  void printMacIpList();
+  void printMacIpList() const;
   void findIps();
   void parseInputArgs(int argc, char* argv[]);
-  void showState();
+  void showState() const;
   bool update_table;
   bool networkIpSet;
   bool showHelp;

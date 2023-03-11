@@ -2,35 +2,7 @@
 
 namespace MACFINDER {
 
-void sendPingAroundNetwork(const std::string& networkIp) {
-  std::string appStr("ping");
-  std::string appFlags("-c 1 -w 0.002");
-  std::thread* threads[255];
-  for(int i = 0; i < 255; i++) {
-    std::string commandStr = appStr + " " + \
-      appFlags + " " + networkIp + "." + std::to_string(i) + " &>/dev/null";
-    threads[i] = new std::thread(
-        [=] {
-          std::system(commandStr.c_str());
-        });
-  }
-  for(int i = 0; i < 255; i++) {
-    threads[i]->join();
-  }
-}
-
-void systemCalltoFile(const std::string& call, const std::string& filename) { 
-  std::string callStr(call);
-  callStr.append(" > ").append(filename);
-  std::system(callStr.c_str());
-}
-
-void delete_file(const std::string& filename) {
-  std::string command("rm -f");
-  std::system(command.append(" ").append(filename).c_str());
-}
-
-void MacFinderApp::printMacIpList() {
+void MacFinderApp::printMacIpList() const {
   for (const MacIp& macip_i : macIpList) {
     std::cout << "mac: " << macip_i.mac << " - ip: " << macip_i.ip << "\n";
   }
@@ -58,17 +30,7 @@ void MacFinderApp::findIps() {
     }
   }
   fp.close();
-  //delete_file(arp_table_filename);
-}
-
-void MacFinderApp::showState() {
-  std::cout << " =====  start show variables  =====\n";
-  std::cout << "NetworkIP: " << networkIp << "\n";
-  std::cout << "update_table:" << update_table << "\n"; 
-  std::cout << "networkIpSet:" << networkIpSet << "\n";
-  std::cout << "showHelp:" << showHelp << "\n";
-  printMacIpList();
-  std::cout << " =====  end show variables  =====\n";
+  delete_file(arp_table_filename);
 }
 
 void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
@@ -95,6 +57,44 @@ void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
       showHelp = true;
     }
   }
+}
+
+void MacFinderApp::showState() const {
+  std::cout << " =====  start show variables  =====\n";
+  std::cout << "NetworkIP: " << networkIp << "\n";
+  std::cout << "update_table:" << update_table << "\n"; 
+  std::cout << "networkIpSet:" << networkIpSet << "\n";
+  std::cout << "showHelp:" << showHelp << "\n";
+  printMacIpList();
+  std::cout << " =====  end show variables  =====\n";
+}
+
+void sendPingAroundNetwork(const std::string& networkIp) {
+  std::string appStr("ping");
+  std::string appFlags("-c 1 -w 0.002");
+  std::thread* threads[255];
+  for(int i = 0; i < 255; i++) {
+    std::string commandStr = appStr + " " + \
+      appFlags + " " + networkIp + "." + std::to_string(i) + " &>/dev/null";
+    threads[i] = new std::thread(
+        [=] {
+          std::system(commandStr.c_str());
+        });
+  }
+  for(int i = 0; i < 255; i++) {
+    threads[i]->join();
+  }
+}
+
+void systemCalltoFile(const std::string& call, const std::string& filename) { 
+  std::string callStr(call);
+  callStr.append(" > ").append(filename);
+  std::system(callStr.c_str());
+}
+
+void delete_file(const std::string& filename) {
+  std::string command("rm -f");
+  std::system(command.append(" ").append(filename).c_str());
 }
 
 void printUsage() {
