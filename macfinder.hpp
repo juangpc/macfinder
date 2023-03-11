@@ -30,35 +30,27 @@ public:
     : update_table(false),
     networkIpSet(false), 
     showHelp(false),
-    table_filename(".macfinder_171921")
+    arp_table_filename(".macfinder_171921")
   {  }
-  void parseInputArgs(int argc, char* argv[]);
-  void showVariables();
   void printMacIpList();
-  void findIps(const std::vector<std::string>& tableARP);
+  void findIps();
+  void parseInputArgs(int argc, char* argv[]);
+  void showState();
   bool update_table;
   bool networkIpSet;
   bool showHelp;
   std::string networkIp;
   std::vector<MacIp> macIpList;
-  const char* table_filename;
+  const char* arp_table_filename;
 private:
+  std::vector<std::string> talbeARP;
 };
-
 
 void sendPingAroundNetwork(const std::string& networkIp);
 
+
 void systemCalltoFile(const std::string& call,
                       const std::string& filename);
-
-void fileToVectorOfStrings(const std::string& filename, 
-                           std::vector<std::string>& lines);
-
-bool macIsFound(std::string& s,
-                std::smatch& found,
-                std::regex& p);
-
-bool file_exists (const std::string& filename);
 
 void delete_file(const std::string& filename);
 

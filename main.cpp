@@ -10,7 +10,6 @@ int main(int argc, char* argv[]) {
 
   app.parseInputArgs(argc, argv);
 
-  // start actual execution
   if (app.showHelp) {
     MACFINDER::printUsage();
     return 1;
@@ -19,18 +18,12 @@ int main(int argc, char* argv[]) {
   if (app.update_table) {
     MACFINDER::sendPingAroundNetwork(app.networkIp);
   }
+  app.findIps();
 
-  MACFINDER::systemCalltoFile("arp -a", app.table_filename);
-
-  std::vector<std::string> tableARP;
-  MACFINDER::fileToVectorOfStrings(app.table_filename, tableARP);
-
-  app.findIps(tableARP);
-
-  app.printMacIpList();
-
-  if (MACFINDER::file_exists(app.table_filename)) {
-    MACFINDER::delete_file(app.table_filename);
+  for (const MACFINDER::MacIp& macip_i : app.macIpList) {
+    std::cout << "mac: " << macip_i.mac << " - ip: "
+        << (macip_i.ip.empty() ? "not found" : macip_i.ip.c_str())
+        << "\n";
   }
 
   return 0;
