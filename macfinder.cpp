@@ -58,7 +58,7 @@ void MacFinderApp::findIps() {
     }
   }
   fp.close();
-  delete_file(arp_table_filename);
+  //delete_file(arp_table_filename);
 }
 
 void MacFinderApp::showState() {
