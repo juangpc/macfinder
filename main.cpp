@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
   }
   app.findIps();
 
+  MACFINDER::printMacIpList(app.macIpList);
 
   return 0;
 }
