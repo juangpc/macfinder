@@ -2,13 +2,6 @@
 
 namespace MACFINDER {
 
-const char* macfinder_ = ".mac_finder_171921";
-
-std::smatch ip_parsed;
-std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
-std::smatch mac_parsed;
-std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
-
 void sendPingAroundNetwork(const std::string& networkIp) {
   std::string appStr("ping");
   std::string appFlags("-c 1 -w 0.002");
@@ -54,8 +47,10 @@ void fileToVectorOfStrings(const std::string& filename,
 
 }
 
-void macIsFound(std::string& s, const std::match& found, const std::regex& p) {
-  return std::regex_search(s, found, p );
+bool macIsFound(std::string& s,
+                std::smatch& found,
+                std::regex& p) {
+  return std::regex_search(s,found,p);
 }
 
 bool file_exists (const std::string& filename) {
@@ -64,18 +59,34 @@ bool file_exists (const std::string& filename) {
 }
 
 
-void printMacIpList(const std::vector<MacIp>& list) {
-  for (const MacIp& macip_i : list) {
+void MacFinderApp::printMacIpList() {
+  for (const MacIp& macip_i : macIpList) {
     std::cout << "mac: " << macip_i.mac << " - ip: " << macip_i.ip << "\n";
   }
 }
 
+void MacFinderApp::findIps(const std::vector<std::string>& tableARP) {
+  for (MacIp& macip_i : macIpList) {
+    for (const std::string& l : tableARP) {
+      std::regex mac_i(macip_i.mac);
+      std::smatch mac_found;
+      if (std::regex_search(l, mac_found, mac_i)) {
+        std::smatch ip_found;
+        if (std::regex_search(l, ip_found, MACFINDER::ip_regex)) {
+          macip_i.ip = ip_found[0];
+        }
+      }
+    }
+  }
+}
+
 void printUsage() {
-  std::cout << "\n";
-  std::cout << "Usage: ./mac_finder [--update_table] <network_ip> <mac_address> [<mac_address>]\n\n";
-  std::cout << "\n";
-  std::cout << "MAC addresses should be specified as a space-separated list. "
-            << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n";
+  std::cout << "\n"
+            << "Usage: ./mac_finder [--update_table|-u] <network_ip> <mac_address> [<mac_address>]\n"
+            << "\n"
+            << "MAC addresses should be specified as a space-separated list.\n"
+            << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n"
+            << "\n";
 }
 
 void MacFinderApp::showVariables() {
@@ -84,7 +95,7 @@ void MacFinderApp::showVariables() {
   std::cout << "update_table:" << update_table << "\n"; 
   std::cout << "networkIpSet:" << networkIpSet << "\n";
   std::cout << "showHelp:" << showHelp << "\n";
-  printMacIpList(macIpList);
+  printMacIpList();
   std::cout << " =====  end show variables  =====\n";
 }
 
@@ -96,10 +107,11 @@ void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
   }
   for (size_t argi = 1; argi < argc; argi++) {
     arg = argv[argi];
-    if ( arg  == "--update_table") { 
+    std::smatch ip_parsed, mac_parsed;
+    if ( arg  == "--update_table" || arg == "-u") { 
       update_table = true;
-    } 
-    else if (std::regex_search(arg, ip_parsed, ip_regex) && !networkIpSet ) {
+    }
+    else if (std::regex_search(arg, ip_parsed, ip_regex) && !networkIpSet) {
       networkIp = arg;
       networkIpSet = true;
     }

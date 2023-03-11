@@ -12,6 +12,9 @@
 
 namespace MACFINDER {
 
+const std::regex mac_regex("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
+const std::regex ip_regex("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
+
 struct MacIp {
   MacIp(const std::string& mac_, 
         const std::string& ip_)
@@ -31,6 +34,8 @@ public:
   {  }
   void parseInputArgs(int argc, char* argv[]);
   void showVariables();
+  void printMacIpList();
+  void findIps(const std::vector<std::string>& tableARP);
   bool update_table;
   bool networkIpSet;
   bool showHelp;
@@ -49,13 +54,13 @@ void systemCalltoFile(const std::string& call,
 void fileToVectorOfStrings(const std::string& filename, 
                            std::vector<std::string>& lines);
 
-void macIsFound(std::string& s, const std::match& found, const std::regex& p);
+bool macIsFound(std::string& s,
+                std::smatch& found,
+                std::regex& p);
 
 bool file_exists (const std::string& filename);
 
 void delete_file(const std::string& filename);
-
-void printMacIpList(const std::vector<MacIp>& list);
 
 void printUsage();
 
