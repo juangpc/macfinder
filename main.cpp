@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
   app.parseInputArgs(argc, argv);
   if (app.errorParsingArgs) {
-    MACFINDER::printUsage();
+    MACFINDER::printHelp();
     return 1;
   }
 

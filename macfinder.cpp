@@ -43,26 +43,37 @@ void MacFinderApp::findIps() {
 
 void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
   std::string arg;
+
+
   // parse argumets
-  if (argc < 3) {
+  if (argc < 2) {
     errorParsingArgs = true;
-  }
-  for (size_t argi = 1; argi < argc; argi++) {
-    arg = argv[argi];
-    std::smatch ip_parsed, mac_parsed;
-    if ( arg  == "--update_table" || arg == "-u") { 
-      update_table = true;
+  } else {
+    if (strcmp(argv[1],"-h") || strcmp(argv[1],"--help")) {
+      printHelp();
+      exit(0);
     }
-    else if (std::regex_search(arg, ip_parsed, IP_REGEX) && !networkIpSet) {
-      networkIp = arg;
-      networkIpSet = true;
+    if (strcmp(argv[1],"--version")) {
+      printVersion();
+      exit(0);
     }
-    else if (std::regex_search(arg, mac_parsed, MAC_REGEX)) {
-      macIpList.emplace_back(MacIp(mac_parsed[0],""));
-    } 
-    else {
-      std::cout << "Incorrect argument format: " << arg << "\n";
-      errorParsingArgs = true;
+    for (int argi = 1; argi < argc; argi++) {
+      arg = argv[argi];
+      std::smatch ip_parsed, mac_parsed;
+      if ( arg  == "--update_table" || arg == "-u") { 
+        update_table = true;
+      }
+      else if (std::regex_search(arg, ip_parsed, IP_REGEX) && !networkIpSet) {
+        networkIp = arg;
+        networkIpSet = true;
+      }
+      else if (std::regex_search(arg, mac_parsed, MAC_REGEX)) {
+        macIpList.emplace_back(MacIp(mac_parsed[0],""));
+      } 
+      else {
+        std::cout << "Incorrect argument format: " << arg << "\n";
+        errorParsingArgs = true;
+      }
     }
   }
 }
@@ -105,12 +116,26 @@ void delete_file(const std::string& filename) {
   std::system(command.append(" ").append(filename).c_str());
 }
 
-void printUsage() {
+void printVersion() {
   std::cout << "\n"
-    << "Usage: ./mac_finder [--update_table|-u] <network_ip> <mac_address> [<mac_address>]\n"
+    << "MacFinder\n"
+    << "version: 0.1 (2023)\n"
+    << "author: juangpc\n"
+    << "\n";
+}
+
+void printHelp() {
+  printVersion();
+  std::cout 
+    << "Usage: ./macfinder [--update_table|-u] <network_ip> <mac_address_list>\n"
     << "\n"
-    << "MAC addresses should be specified as a space-separated list.\n"
-    << "Use lower case letters. Ex. 00:0e:c6:5b:65:ab" << "\n"
+    << "--help (-h)          Show (this) help.\n"
+    << "--version            Show version.\n"
+    << "--update_table (-u)  Update the list of known hosts in the network.\n"
+    << "<networ_ip>          Network IP example: 192.169.1.0\n"
+    << "<mac_address_list>   MAC addresses list should be specified as a \n"
+    << "                     space-separated list. Use lower case letters.\n"
+    << "                     Example. 00:0e:c6:5b:65:ab 00:0e:c6:73:c7:31\n"
     << "\n";
 }
 

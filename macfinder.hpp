@@ -50,13 +50,14 @@ void printMacIpList(const std::vector<MacIp>& macIpList);
 
 void sendPingAroundNetwork(const std::string& networkIp);
 
-
 void systemCalltoFile(const std::string& call,
                       const std::string& filename);
 
 void delete_file(const std::string& filename);
 
-void printUsage();
+void printVersion();
+
+void printHelp();
 
 
 }  // namespace MACFINDER
