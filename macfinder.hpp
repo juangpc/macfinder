@@ -14,6 +14,7 @@ namespace MACFINDER {
 
 const std::regex MAC_REGEX("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
 const std::regex IP_REGEX("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
+const std::regex IP_NET_REGEX("[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
 
 struct MacIp {
   MacIp(const std::string& mac_, 

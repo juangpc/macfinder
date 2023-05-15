@@ -31,11 +31,14 @@ void MacFinderApp::findIps() {
       std::regex mac_i(macip_i.mac);
       if (std::regex_search(line, mac_found, mac_i)) {
         std::smatch ip_found;
-        if (std::regex_search(line, ip_found, MACFINDER::IP_REGEX)) {
+        // std::cout << line << "\n";
+        if (std::regex_search(line, ip_found, IP_REGEX)) {
           macip_i.ip = ip_found[0];
         }
       }
     }
+    fp.clear();
+    fp.seekg(0);
   }
   fp.close();
   delete_file(arp_table_filename);
@@ -60,7 +63,7 @@ void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
   } else {
     for (int argi = 1; argi < argc; argi++) {
       arg = argv[argi];
-      std::smatch ip_parsed, mac_parsed;
+      std::smatch ip_parsed, ip_net_parsed, mac_parsed;
       if ((arg == "-h") || (arg == "--help")) {
         printHelp();
         exit(0);
@@ -73,7 +76,8 @@ void MacFinderApp::parseInputArgs(int argc, char* argv[]) {
         update_table = true;
       }
       else if (std::regex_search(arg, ip_parsed, IP_REGEX) && !networkIpSet) {
-        networkIp = arg;
+        std::regex_search(arg, ip_net_parsed, IP_NET_REGEX);
+        networkIp = ip_net_parsed.str(0);
         networkIpSet = true;
       }
       else if (std::regex_search(arg, mac_parsed, MAC_REGEX)) {
@@ -104,6 +108,7 @@ void sendPingsAroundNetwork(const std::string& networkIp) {
   for(int i = 0; i < 255; i++) {
     std::string commandStr = appStr + " " + \
       appFlags + " " + networkIp + "." + std::to_string(i) + " &>/dev/null";
+    //std::cout << commandStr << "\n";
     threads[i] = new std::thread(
         [=] {
           std::system(commandStr.c_str());
@@ -128,7 +133,7 @@ void delete_file(const std::string& filename) {
 void printVersion() {
   std::cout << "\n"
     << "MacFinder 0.1 (2023)\n"
-    << "Author: juangpc\n"
+    << "author: juangpc\n"
     << "\n";
 }
 
