@@ -149,7 +149,7 @@ void printHelp() {
     << "<mac_address_list>   MAC addresses list should be specified as a \n"
     << "                     space-separated list. Use lower case letters.\n"
     << "\n"
-    << "Ex: ./macfinder -u 172.21.16.0 00:0e:c6:5b:65:ab 00:0e:c6:73:c7:31\n"
+    << "Ex: ./macfinder -u 172.21.16.0 00:0e:c6:73:c7:31 00:0e:c6:5b:65:ab\n"
     << "\n"
     << "\n";
 }
